@@ -1,20 +1,19 @@
 package com.komasan.springcrud.services;
 
-import com.komasan.springcrud.interfaces.UserRepository;
+import com.komasan.springcrud.controllers.UserController;
+import com.komasan.springcrud.repository.UserRepository;
 import com.komasan.springcrud.user.UserClass;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
-    @Autowired
     private final UserRepository userRepository;
 
     public List<UserClass> getAllUsers() {
@@ -23,7 +22,7 @@ public class UserService {
 
     public UserClass getUserById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
     public UserClass createNewUser(UserClass user) {
@@ -32,7 +31,7 @@ public class UserService {
 
     public UserClass updateUser(Long id, UserClass userClass) {
         UserClass existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         existingUser.setUsername(userClass.getUsername());
         existingUser.setAge(userClass.getAge());
@@ -42,6 +41,6 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-         userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 }

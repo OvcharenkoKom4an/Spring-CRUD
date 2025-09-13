@@ -2,6 +2,9 @@ package com.komasan.springcrud.user;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +16,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 public class UserClass {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
+    @Size(min = 3, max = 15)
     private String username;
+    @NotNull
     private Integer age;
+    @Email
     private String email;
-
-
 
 }
