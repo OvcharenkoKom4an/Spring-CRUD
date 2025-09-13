@@ -1,5 +1,6 @@
 package com.komasan.springcrud.controllers;
 
+import com.komasan.springcrud.DTO.UserRequest;
 import com.komasan.springcrud.DTO.UserResponse;
 import com.komasan.springcrud.mappers.UserMapper;
 import com.komasan.springcrud.repository.UserRepository;
@@ -39,19 +40,36 @@ public class UserController {
         if(user == null) {
             return ResponseEntity.notFound().build();
         }
-        UserResponse responseDto = userMapper.toResponseDto(user);
-        return ResponseEntity.ok(responseDto);
+        return ResponseEntity.ok(userMapper.toResponseDto(user));
     }
 
 
     @PostMapping
-    public ResponseEntity<UserClass> createUser(@Valid @RequestBody UserClass userClass) {
-        return ResponseEntity.ok(userService.createNewUser(userClass));
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
+        //making Dto request entity
+        UserClass userEntity = userMapper.toEntity(userRequest);
+        // save through the service
+        UserClass saveEntity = userService.createNewUser(userEntity);
+        if(saveEntity == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        // making Dto to an entity
+        UserResponse responseDto = userMapper.toResponseDto(saveEntity);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserClass> updateUser(@PathVariable Long id, @Valid @RequestBody UserClass userClass) {
-        return ResponseEntity.ok(userService.updateUser(id, userClass));
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
+        UserClass existingUser = userService.getUserById(id);
+        if(existingUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        userMapper.updateEntity(userRequest, existingUser);
+        UserClass updateEntity = userService.updateUser(id, existingUser);
+        UserResponse responseDto = userMapper.toResponseDto(updateEntity);
+        return ResponseEntity.ok(responseDto);
+
     }
 
     @DeleteMapping("/{id}")
