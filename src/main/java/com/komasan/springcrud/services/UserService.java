@@ -1,10 +1,13 @@
 package com.komasan.springcrud.services;
 
 import com.komasan.springcrud.controllers.UserController;
+import com.komasan.springcrud.mappers.UserMapper;
 import com.komasan.springcrud.repository.UserRepository;
 import com.komasan.springcrud.user.UserClass;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 

@@ -18,12 +18,12 @@ public class UserClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
     @Size(min = 3, max = 15)
     private String username;
     @NotNull
     private Integer age;
     @Email
     private String email;
-
+    @Size(min = 3, max = 15)
+    private String password;
 }

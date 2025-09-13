@@ -1,5 +1,7 @@
 package com.komasan.springcrud.controllers;
 
+import com.komasan.springcrud.DTO.UserResponse;
+import com.komasan.springcrud.mappers.UserMapper;
 import com.komasan.springcrud.repository.UserRepository;
 import com.komasan.springcrud.services.UserService;
 import com.komasan.springcrud.user.UserClass;
@@ -19,22 +21,30 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserClass>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserClass> users = userService.getAllUsers();
-        if(users.isEmpty()) {
+        if (users.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(users);
+        List<UserResponse> responseDto = userMapper.toResponseDto(users);
+        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserClass> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+        UserClass user = userService.getUserById(id);
+        if(user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        UserResponse responseDto = userMapper.toResponseDto(user);
+        return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping("/post")
+
+    @PostMapping
     public ResponseEntity<UserClass> createUser(@Valid @RequestBody UserClass userClass) {
         return ResponseEntity.ok(userService.createNewUser(userClass));
     }
