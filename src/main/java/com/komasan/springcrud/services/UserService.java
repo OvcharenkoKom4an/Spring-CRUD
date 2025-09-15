@@ -2,7 +2,9 @@ package com.komasan.springcrud.services;
 
 import com.komasan.springcrud.controllers.UserController;
 import com.komasan.springcrud.mappers.UserMapper;
+import com.komasan.springcrud.repository.UserLogRepository;
 import com.komasan.springcrud.repository.UserRepository;
+import com.komasan.springcrud.user.UserAuditLog;
 import com.komasan.springcrud.user.UserClass;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,14 +20,14 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserLogRepository userLogRepository;
 
     public List<UserClass> getAllUsers() {
         return userRepository.findAll();
     }
 
     public UserClass getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRepository.findById(id).orElse(null);
     }
 
     public UserClass createNewUser(UserClass user) {
@@ -46,4 +48,6 @@ public class UserService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
 }
+
