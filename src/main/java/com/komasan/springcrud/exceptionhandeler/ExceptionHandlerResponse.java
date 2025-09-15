@@ -1,5 +1,6 @@
 package com.komasan.springcrud.exceptionhandeler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @ControllerAdvice
 public class ExceptionHandlerResponse {
 
@@ -34,6 +36,8 @@ public class ExceptionHandlerResponse {
                 case "email" -> errors.add(errorEmail);
             }
         });
+        log.warn("Validation failed: {}", errors);
+
         return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
 
     }
