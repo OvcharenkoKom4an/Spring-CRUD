@@ -15,7 +15,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
     UserResponse toResponseDto(UserClass user);
-    List<UserResponse> toResponseDto(List<UserClass> users);
     UserClass toEntity(UserRequest dto);
     void updateEntity(UserRequest dto, @MappingTarget UserClass user);
     }

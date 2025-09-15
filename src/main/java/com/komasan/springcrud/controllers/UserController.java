@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -36,7 +37,10 @@ public class UserController {
             log.warn("No users found");
             return ResponseEntity.notFound().build();
         }
-        List<UserResponse> responseDto = userMapper.toResponseDto(users);
+        List<UserResponse> responseDto = users
+                .stream()
+                .map(userMapper::toResponseDto)
+                .collect(Collectors.toList());
         userAuditLogService.logAction("GET", "UserClass", null);
 
         log.info("{} Users was found", responseDto.size());
@@ -46,7 +50,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         UserClass user = userService.getUserById(id);
-        if(user == null) {
+        if (user == null) {
             log.warn("User with id {} not found", id);
             return ResponseEntity.notFound().build();
         }
@@ -63,7 +67,7 @@ public class UserController {
         UserClass userEntity = userMapper.toEntity(userRequest);
         // save through the service
         UserClass saveEntity = userService.createNewUser(userEntity);
-        if(saveEntity == null) {
+        if (saveEntity == null) {
             return ResponseEntity.badRequest().build();
         }
         // making Dto to an entity
@@ -77,7 +81,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserRequest userRequest) {
         UserClass existingUser = userService.getUserById(id);
-        if(existingUser == null) {
+        if (existingUser == null) {
             return ResponseEntity.notFound().build();
         }
         userMapper.updateEntity(userRequest, existingUser);
