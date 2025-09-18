@@ -20,7 +20,6 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserRepository userRepositoryUsername;
     private final UserLogRepository userLogRepository;
 
     public List<UserClass> getAllUsers() {
@@ -29,14 +28,6 @@ public class UserService {
 
     public UserClass getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
-    }
-
-    public UserClass getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public UserClass getUserByEmail(String email) {
-        return userRepository.findByEmail(email);
     }
 
     public UserClass createNewUser(UserClass user) {

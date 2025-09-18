@@ -40,7 +40,7 @@ public class UserController {
         List<UserResponse> responseDto = users
                 .stream()
                 .map(userMapper::toResponseDto)
-                .toList();
+                .collect(Collectors.toList());
         userAuditLogService.logAction("GET", "UserClass", null);
 
         log.info("{} Users was found", responseDto.size());
@@ -57,32 +57,6 @@ public class UserController {
         userAuditLogService.logAction("GET", "UserClass", id);
 
         log.info("User with id {} was created", id);
-        return ResponseEntity.ok(userMapper.toResponseDto(user));
-    }
-
-    @GetMapping("/username/{username}")
-    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
-        UserClass user = userService.getUserByUsername(username);
-        if(user == null) {
-            log.warn("User with name {} does not exist", username);
-            return ResponseEntity.notFound().build();
-        }
-        userAuditLogService.logAction("GET", "UserClass", user.getId());
-
-        log.info("User with name {} was found", username);
-        return ResponseEntity.ok(userMapper.toResponseDto(user));
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
-        UserClass user = userService.getUserByEmail(email);
-        if(user == null) {
-            log.warn("User with email {} does not exist", email);
-            return ResponseEntity.notFound().build();
-        }
-        userAuditLogService.logAction("GET", "UserClass", user.getId());
-
-        log.info("User with email {} was created", email);
         return ResponseEntity.ok(userMapper.toResponseDto(user));
     }
 
