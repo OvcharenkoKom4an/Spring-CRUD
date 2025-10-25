@@ -58,6 +58,7 @@ public class UserController {
 
         log.info("User with id {} was created", id);
         return ResponseEntity.ok(userMapper.toResponseDto(user));
+
     }
 
 
