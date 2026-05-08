@@ -63,14 +63,11 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest userRequest) {
-        //making Dto request entity
         UserClass userEntity = userMapper.toEntity(userRequest);
-        // save through the service
         UserClass saveEntity = userService.createNewUser(userEntity);
         if (saveEntity == null) {
             return ResponseEntity.badRequest().build();
         }
-        // making Dto to an entity
         UserResponse responseDto = userMapper.toResponseDto(saveEntity);
         userAuditLogService.logAction("POST", "UserClass", saveEntity.getId());
 
