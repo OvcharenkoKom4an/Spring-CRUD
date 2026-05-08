@@ -24,10 +24,7 @@ public class ExceptionHandlerResponse {
 
         Set<String> errors = new HashSet<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
-            // every error is an ObjectError
-            // but if error relates to particular field example (username)
             FieldError fieldError = (FieldError) error;
-            // just getting Field where we found ann error
             String fieldName = fieldError.getField();
 
             switch (fieldName) {
